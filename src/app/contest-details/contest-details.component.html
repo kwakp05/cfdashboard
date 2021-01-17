@@ -1,0 +1,101 @@
+<div class="error-box" *ngIf="showError">We weren't able to find that contest. Please try again later.</div>
+
+<div class="details-container" *ngIf="!showError">
+
+    <h1 class="title"><a [href]="'https://codeforces.com/contest/' + contestId">{{contestName}}</a></h1>
+
+    <h3>Participation (rated)</h3>
+
+    <div class="participation-container">
+        <div class="participation-graph" #participation_graph [appGraph]="this.participationDataLayout"></div>
+
+        <table class="participation-table">
+            <tr>
+                <th>Title</th>
+                <th>Count</th>
+            </tr>
+            <tr>
+                <td class="cell-participation-title">Total</td>
+                <td class="cell-participation-count">{{this.totalParticipation}}</td>
+            </tr>
+            <ng-container *ngFor="let rankGroup of this.participation">
+                <tr *ngIf="rankGroup.count">
+                    <td [class]="this.ratingService.fromTitleGetCSSClass(rankGroup.rank)" class="cell-participation-title">{{rankGroup.rank}}</td>
+                    <td class="cell-participation-count">{{rankGroup.count}}</td>
+                </tr>
+            </ng-container>
+            
+        </table>
+    </div>
+
+    <h3>Problemset Overview</h3>
+
+    <div class="solves_container">
+        
+    </div>
+
+    <div class="problems_container">
+        <div class="solves-graph" [appGraph]="this.solvesDataLayout"></div>
+        <div class="problem-graph" *ngFor="let problemStats of this.problems; let i = index" [appGraph]="this.problemsDataLayout[i]"></div>
+    </div>
+
+    <h3>Benchmarks</h3>
+
+    <div class="benchmarks_container">
+        <div *ngFor="let benchmark of this.benchmarks">
+            <table class="benchmarks_table">
+                <tr>
+                    <th colspan="100"class="benchmark_title" [style.backgroundColor]="this.ratingService.fromTitleGetUserColor(benchmark.rank)">{{benchmark.rank}}</th>
+                </tr>
+                <tr>
+                    <th>#</th>
+                    <th class="cell-who">Who</th>
+                    <th>=</th>
+                    <th *ngIf="this.contestType == 'ICPC'">Penalty</th>
+                    <th>*</th>
+                    <th *ngFor="let problem of this.problems" class="cell-header-problem">
+                        <a title="{{problem.index}} - {{problem.name}}" href="https://codeforces.com/contest/{{contestId}}/problem/{{problem.index}}">
+                            {{problem.index}}
+                        </a>
+                        <br>
+                        <ng-container *ngIf="this.contestType == 'CF'">
+                            {{problem.points}}
+                        </ng-container>
+                    </th>
+                </tr>
+                <tr *ngFor="let model of benchmark.models">
+                    <td class="cell-rank">{{model.rank}}</td>
+                    <td class="cell-handle"><a [href]="'https://codeforces.com/profile/' + model.party.members[0].handle">{{model.party.members[0].handle}}</a></td>
+                    <td class="cell-points"><span>{{model.points}}</span></td>
+                    <td *ngIf="this.contestType == 'ICPC'" class="cell-penalty">{{model.penalty}}</td>
+                    <td *ngIf="!model.successfulHackCount && !model.unsuccessfulHackCount" class="cell-hacks"></td>
+                    <td *ngIf="!model.successfulHackCount && model.unsuccessfulHackCount" class="cell-hacks">-{{model.unsuccessfulHackCount}}</td>
+                    <td *ngIf="model.successfulHackCount && !model.unsuccessfulHackCount" class="cell-hacks">+{{model.successfulHackCount}}</td>
+                    <td *ngIf="model.successfulHackCount && model.unsuccessfulHackCount" class="cell-hacks">+{{model.successfulHackCount}}:-{{model.unsuccessfulHackCount}}</td>
+                    <ng-container *ngIf="this.contestType == 'CF'">
+                        <td *ngFor="let result of model.problemResults" class="cell-submission">
+                            <ng-container *ngIf="result.points">
+                                <span *ngIf="result.points" class="cell-accepted">{{result.points}}</span>
+                                <span *ngIf="result.points && result.rejectedAttemptCount" class="cell-attempt">({{result.rejectedAttemptCount}})</span>
+                                <span *ngIf="result.points" class="cell-time">{{(result.bestSubmissionTimeHours).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}}:{{(result.bestSubmissionTimeMinutes).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}}</span>
+                            </ng-container>
+                            <span *ngIf="!result.points && result.rejectedAttemptCount" class="cell-rejected">{{-result.rejectedAttemptCount}}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container *ngIf="this.contestType == 'ICPC'">
+                        <td *ngFor="let result of model.problemResults" class="cell-submission">
+                            <ng-container *ngIf="result.points">
+                                <span class="cell-accepted">+<ng-container *ngIf="result.rejectedAttemptCount">{{result.rejectedAttemptCount}}</ng-container></span>
+                                <span class="cell-time">{{(result.bestSubmissionTimeHours).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}}:{{(result.bestSubmissionTimeMinutes).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}}</span>
+                            </ng-container>
+                            <ng-container *ngIf="!result.points && result.rejectedAttemptCount">
+                                <span class="cell-rejected">-{{result.rejectedAttemptCount}}</span>
+                            </ng-container>
+                        </td>
+                    </ng-container>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>

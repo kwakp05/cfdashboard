@@ -1,0 +1,86 @@
+.dashboard_container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    margin: auto;
+    justify-content: space-evenly;
+}
+
+.contest_name {
+    height: 50px;
+    font-weight: bold;
+}
+
+.contest {
+    font-size: 15px;
+    color: #202124;
+    background-color: white;
+    width: 250px;
+    height: 225px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: grey;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0.5em;
+    text-align: center;
+    /*color: black;*/
+    cursor: pointer;
+}
+
+.label {
+    float: left;
+    width: 50%;
+    margin-top: 10px;
+}
+
+.label-center {
+    display: inline-block;
+    width: 50%;
+    margin: auto;
+    margin-top: 10px;
+    clear: both;
+}
+
+.delta {
+    font-size: 20px;
+}
+
+.contest:hover, .contest:focus {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.rating-gray {
+    color: gray;
+    font-weight: bold;
+}
+
+.rating-green {
+    color: green;
+    font-weight: bold;
+}
+
+.rating-cyan {
+    color: #03A89E;
+    font-weight: bold;
+}
+
+.rating-blue {
+    color: blue;
+    font-weight: bold;
+}
+
+.rating-purple {
+    color: #a0a;
+    font-weight: bold;
+}
+
+.rating-orange {
+    color: #FF8C00;
+    font-weight: bold;
+}
+
+.rating-red {
+    color: red;
+    font-weight: bold;
+}

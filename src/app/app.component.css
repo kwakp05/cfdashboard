@@ -1,0 +1,47 @@
+body {
+    color: #202124;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+.title a:link, .title a:visited {
+    text-decoration: none;
+    color: #202124;
+}
+
+.title a:hover, .title a:active {
+    text-decoration: underline;
+    color: #202124;
+}
+
+.search_container {
+    margin-left: 33.33%;
+    margin-right: 33.33%;
+    width: 33.33%;
+    text-align: center;
+}
+
+input [type=text]{
+    padding: 6px;
+    border: none;
+}
+
+form {
+    padding: 15px;
+}
+
+.category-button {
+    font-size: 20px;
+    border: none;
+    margin: 5px;
+    padding: 5px;
+    cursor: pointer;
+    background-color: white;
+}
+
+.category-button-selected {
+    border-bottom: 3px solid #3B5998;
+}

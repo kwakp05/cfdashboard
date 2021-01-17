@@ -1,0 +1,19 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+  <h1 class="title"><a href="/">CF Dashboard</a></h1>
+  <div class="search_container">
+    <button class="category-button" [class.category-button-selected]="categoryUsers" (click)="switchToUsers()">Users</button>
+    <button class="category-button" [class.category-button-selected]="categoryContests" (click)="switchToContests()">Contests</button>
+    <form *ngIf="categoryUsers">
+      <input #handle type="text" id="handle" name="handle" [(ngModel)]="userHandle" placeholder="Search handle">
+      <a routerLink="/dashboard" [queryParams]="{handle: userHandle}"><button><i class="fa fa-search"></i></button></a>
+    </form>
+    <form *ngIf="categoryContests">
+      <input #handle type="text" id="contestId" name="handle" [(ngModel)]="contestId" placeholder="Search contest ID">
+      <a routerLink="/contest" [queryParams]="{contestId: contestId}"><button><i class="fa fa-search"></i></button></a>
+    </form>
+  </div> 
+  <router-outlet></router-outlet>
+</body>

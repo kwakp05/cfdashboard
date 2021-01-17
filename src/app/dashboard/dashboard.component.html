@@ -1,0 +1,21 @@
+<div class="dashboard_container">
+    <div *ngIf="showError">We weren't able to find that user. Please try again later.</div>
+    <button *ngFor="let item of contests" class="contest" [id]="item.contestId" routerLink="/contest" [queryParams]="{contestId: item.contestId}" (click)="viewContestDetails(item.contestId)">
+        <div class="contest_name">{{item.contestName}}</div>
+        <div class="delta" [class.rating-green]="item.delta >= 0" [class.rating-red]="item.delta < 0">{{addSignNumber(item.delta)}}</div>
+        <div class="label">Expected rank<br>{{item.expectedRank}}</div>
+        <div class="label">Actual rank<br>{{item.actualRank}}</div>
+        <div class="label">
+            Old rating<br>
+            <span [class]="this.ratingService.fromRatingGetCSSClass(item.oldRating)">{{item.oldRating}}</span>
+        </div>
+        <div class="label">
+            New rating<br>
+            <span [class]="this.ratingService.fromRatingGetCSSClass(item.newRating)">{{item.newRating}}</span>
+        </div>
+        <div class="label-center">
+            Performance<br>
+            <span [class]="this.ratingService.fromRatingGetCSSClass(item.performance)">{{item.performance}}</span>
+        </div>
+    </button>
+</div>

@@ -1,0 +1,159 @@
+h3 {
+    clear: both;
+}
+
+.back-button {
+    margin-left: 50px;
+}
+
+.title {
+    text-align: center;   
+}
+
+.title a:link, .title a:visited {
+    text-decoration: none;
+    color: #202124;
+}
+
+.title a:hover, .title a:active {
+    text-decoration: underline;
+    color: #202124;
+}
+
+.details-container {
+    text-align: center;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 5px;
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+    margin: auto;
+}
+
+.participation-graph {
+    display: inline-block;
+}
+
+.benchmarks_table {
+    width: 80%;
+    min-width: 900px;
+    margin-bottom: 20px;
+}
+
+.cell-who {
+    text-align: left;
+}
+
+.cell-participation-title {
+    width: 200px;
+}
+
+.cell-participation-count {
+    width: 200px;
+}
+
+.cell-accepted {
+    color: #0a0;
+    font-weight: bold;
+}
+
+.cell-time {
+    font-size: 12px;
+    display: block;
+}
+
+.cell-rejected {
+    color: #00a;
+}
+
+.cell-points {
+    width: 1%;
+    font-weight: bold;
+}
+
+.cell-hacks {
+    width: 68px;
+}
+
+.cell-submission {
+    width: 65px;
+}
+
+.cell-attempt {
+    color: #FF0000;
+    margin-left: 3px;
+}
+
+.cell-rank {
+    width: 1%;
+}
+
+.cell-penalty {
+    width: 56px;
+}
+
+.cell-handle {
+    text-align: left;
+}
+
+.benchmark_title {
+    font-weight: normal;
+    color: white;
+    padding: 10px;
+}
+
+.benchmarks_table td:nth-child(2) {
+    /*width: 100%;*/
+    max-width: 99%;
+}
+
+.problem-graph, .solves-graph {
+    display: inline-block;
+}
+
+.rating-gray {
+    color: gray;
+    font-weight: bold;
+}
+
+.rating-green {
+    color: green;
+    font-weight: bold;
+}
+
+.rating-cyan {
+    color: #03A89E;
+    font-weight: bold;
+}
+
+.rating-blue {
+    color: blue;
+    font-weight: bold;
+}
+
+.rating-purple {
+    color: #a0a;
+    font-weight: bold;
+}
+
+.rating-orange {
+    color: #FF8C00;
+    font-weight: bold;
+}
+
+.rating-red {
+    color: red;
+    font-weight: bold;
+}
+
+.error-box {
+    text-align: center;
+}
