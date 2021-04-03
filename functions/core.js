@@ -66,7 +66,7 @@ function getDashboardData(userHandle, pageNum) {
   log(`Enter getDashboardData(${userHandle}, page ${pageNum})`);
   return fetch.requestUserContestHistory(userHandle).then((contestHistory) => {
     if (contestHistory && contestHistory.status == "OK") {
-      contestHistory = contestHistory.result;
+      contestHistory = contestHistory.result.reverse();
       const numPages = Math.floor((contestHistory.length + DASHBOARD_CONTESTS_PER_PAGE - 1) / DASHBOARD_CONTESTS_PER_PAGE);
       pageNum = Math.max(1, Math.min(pageNum, numPages));
       log(`Adjusted page num: ${pageNum}`);
