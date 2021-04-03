@@ -5,12 +5,15 @@ const ratings = require("./ratings");
 
 const { log } = require("firebase-functions/lib/logger");
 
+const DASHBOARD_CONTESTS_PER_PAGE = 4;
+
 exports.serveDashboardRequest = function(req, res) {
   const userHandle = req.query.handle;
+  const pageNum = parseInt(req.query.page) || 1;
   if (!userHandle) {
     res.status(400).json({ status: "FAILED", comment: `Invalid handle ${userHandle}`});
   } else {
-    getDashboardData(userHandle).then((result) => {
+    getDashboardData(userHandle, pageNum).then((result) => {
       log(`Serving ${userHandle} dashboard`);
       res.json(result);
     })
@@ -43,8 +46,10 @@ function getContestDetails(contestId) {
   });
 }
 
-function getDashboardData(userHandle) {
+function getDashboardData(userHandle, pageNum) {
   /**
+   * pageNum is 1-indexed
+   * 
    *  [
    *    {
    *      contestId: 1,
@@ -58,13 +63,21 @@ function getDashboardData(userHandle) {
    *    ...
    *  ]
    */
-  log(`Enter getDashboardData(${userHandle})`);
+  log(`Enter getDashboardData(${userHandle}, page ${pageNum})`);
   return fetch.requestUserContestHistory(userHandle).then((contestHistory) => {
     if (contestHistory && contestHistory.status == "OK") {
       contestHistory = contestHistory.result;
+      const numPages = Math.floor((contestHistory.length + DASHBOARD_CONTESTS_PER_PAGE - 1) / DASHBOARD_CONTESTS_PER_PAGE);
+      pageNum = Math.max(1, Math.min(pageNum, numPages));
+      log(`Adjusted page num: ${pageNum}`);
       const promiseList = [];
 
-      for (contest of contestHistory) {
+      for (let i = 0; i < DASHBOARD_CONTESTS_PER_PAGE; i++) {
+        let ind = (pageNum - 1) * DASHBOARD_CONTESTS_PER_PAGE + i;
+        if (ind >= contestHistory.length)
+          break;
+
+        let contest = contestHistory[ind];
         log("generating user report contest " + contest.contestId);
         contest.delta = contest.newRating - contest.oldRating;
         contest.actualRank = contest.rank;

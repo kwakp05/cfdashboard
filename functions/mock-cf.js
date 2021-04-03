@@ -162,6 +162,33 @@ exports.mockUserRating = function(handle) {
                 ratingUpdateTimeSeconds: 1556296500,
                 oldRating: 1516,
                 newRating: 1584
+            },
+            {
+                contestId: 1158,
+                contestName: "Third Contest",
+                handle: handle,
+                rank: 4,
+                ratingUpdateTimeSeconds: 1556296500,
+                oldRating: 1516,
+                newRating: 1584
+            },
+            {
+                contestId: 1157,
+                contestName: "Fourth Contest",
+                handle: handle,
+                rank: 4,
+                ratingUpdateTimeSeconds: 1556296500,
+                oldRating: 1516,
+                newRating: 1584
+            },
+            {
+                contestId: 1157,
+                contestName: "Fifth Contest",
+                handle: handle,
+                rank: 4,
+                ratingUpdateTimeSeconds: 1556296500,
+                oldRating: 1516,
+                newRating: 1584
             }
         ]
     };
