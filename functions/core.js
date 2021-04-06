@@ -90,7 +90,12 @@ function getDashboardData(userHandle, pageNum) {
         }));
       }
 
-      return Promise.all(promiseList);
+      return Promise.all(promiseList).then((contestAnalyticsList) => {
+        return {
+          numPages: numPages,
+          result: contestAnalyticsList
+        };
+      })
     } else {
       log(`CF API contest history request failed: ${userHandle}`);
       throw new Error("CF API contest history request failed: ${userHandle}");

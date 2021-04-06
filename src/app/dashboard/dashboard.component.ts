@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
           const observer = {
             next: (data: any) => {
               this.showError = false;
-              this.contests = data;
+              this.contests = data.result;
             },
             error: (err: any) => {
               this.showError = true;

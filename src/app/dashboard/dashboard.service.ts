@@ -13,17 +13,20 @@ export class DashboardService {
 
   getUserContestHistory(userHandle: string): Observable<any> {
     /**
-     *  [
-     *    {
-     *      contestId: 1,
-     *      contestName: "Codeforces Beta Round #1",
-     *      expectedRank: 1,
-     *      actualRank: 1,
-     *      oldRating: 2000,
-     *      newRating: 2000,
-     *      performance: 2000
-     *    }
-     *  ]
+     *  {
+     *    numPages: 2,
+     *    result: [
+     *      {
+     *        contestId: 1,
+     *        contestName: "Codeforces Beta Round #1",
+     *        expectedRank: 1,
+     *        actualRank: 1,
+     *        oldRating: 2000,
+     *        newRating: 2000,
+     *        performance: 2000
+     *      }
+     *    ]
+     *  }
      */
     return this.http.get(`${environment.apiUrl}/dashboard`, { params: { handle: userHandle } })
       .pipe( catchError(this.handleError) );
