@@ -1,21 +1,40 @@
 <div class="dashboard_container">
     <div *ngIf="showError">We weren't able to find that user. Please try again later.</div>
-    <button *ngFor="let item of contests" class="contest" [id]="item.contestId" routerLink="/contest" [queryParams]="{contestId: item.contestId}" (click)="viewContestDetails(item.contestId)">
-        <div class="contest_name">{{item.contestName}}</div>
-        <div class="delta" [class.rating-green]="item.delta >= 0" [class.rating-red]="item.delta < 0">{{addSignNumber(item.delta)}}</div>
-        <div class="label">Expected rank<br>{{item.expectedRank}}</div>
-        <div class="label">Actual rank<br>{{item.actualRank}}</div>
-        <div class="label">
-            Old rating<br>
-            <span [class]="this.ratingService.fromRatingGetCSSClass(item.oldRating)">{{item.oldRating}}</span>
-        </div>
-        <div class="label">
-            New rating<br>
-            <span [class]="this.ratingService.fromRatingGetCSSClass(item.newRating)">{{item.newRating}}</span>
-        </div>
-        <div class="label-center">
-            Performance<br>
-            <span [class]="this.ratingService.fromRatingGetCSSClass(item.performance)">{{item.performance}}</span>
-        </div>
-    </button>
+    <div class="contests_container">
+        <button *ngFor="let item of contests" class="contest" [id]="item.contestId" routerLink="/contest" [queryParams]="{contestId: item.contestId}" (click)="viewContestDetails(item.contestId)">
+            <div class="contest_name">{{item.contestName}}</div>
+            <div class="delta" [class.rating-green]="item.delta >= 0" [class.rating-red]="item.delta < 0">{{addSignNumber(item.delta)}}</div>
+            <div class="label">Expected rank<br>{{item.expectedRank}}</div>
+            <div class="label">Actual rank<br>{{item.actualRank}}</div>
+            <div class="label">
+                Old rating<br>
+                <span [class]="this.ratingService.fromRatingGetCSSClass(item.oldRating)">{{item.oldRating}}</span>
+            </div>
+            <div class="label">
+                New rating<br>
+                <span [class]="this.ratingService.fromRatingGetCSSClass(item.newRating)">{{item.newRating}}</span>
+            </div>
+            <div class="label-center">
+                Performance<br>
+                <span [class]="this.ratingService.fromRatingGetCSSClass(item.performance)">{{item.performance}}</span>
+            </div>
+        </button>
+    </div>
+
+    <div class="page_nav" *ngIf="this.numPages">
+        <ul class="page_bar">
+            <li>
+                <button routerLink="/dashboard" [queryParams]="{handle: userHandle, page: 1}">First</button>
+            </li>
+            <li>
+                <button routerLink="/dashboard" [queryParams]="{handle: userHandle, page: curPage > 1 ? curPage - 1 : 1}">Previous</button>
+            </li>
+            <li>
+                <button routerLink="/dashboard" [queryParams]="{handle: this.userHandle, page: curPage < numPages ? curPage + 1 : numPages}">Next</button>
+            </li>
+            <li>
+                <button routerLink="/dashboard" [queryParams]="{handle: userHandle, page: numPages}">Last</button>
+            </li>
+        </ul>
+    </div>
 </div>

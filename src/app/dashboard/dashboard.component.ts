@@ -12,6 +12,8 @@ export class DashboardComponent implements OnInit {
   userHandle: string;
   @Output() contestRequest = new EventEmitter<number>();
   contests: any;
+  numPages: number;
+  curPage: number;
   showError: boolean;
 
   constructor(
@@ -21,6 +23,8 @@ export class DashboardComponent implements OnInit {
   ) {
     this.userHandle = "";
     this.contests = [];
+    this.numPages = 0;
+    this.curPage = 0;
     this.showError = false;
   }
 
@@ -39,21 +43,24 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      if (params["handle"] != this.userHandle) {
+      if (params["handle"] != this.userHandle || params["page"] != this.curPage) {
           this.userHandle = params["handle"];
+          this.curPage = Number(params["page"]) || 1;
           this.contests = [];
 
           const observer = {
             next: (data: any) => {
               this.showError = false;
               this.contests = data.result;
+              this.numPages = Number(data.numPages);
             },
             error: (err: any) => {
               this.showError = true;
               this.contests = [];
+              this.numPages = 0;
             }
           }
-          this.dashboardService.getUserContestHistory(this.userHandle).subscribe(observer);
+          this.dashboardService.getUserContestHistory(this.userHandle, this.curPage).subscribe(observer);
       }
     });
   }

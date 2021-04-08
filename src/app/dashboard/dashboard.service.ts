@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class DashboardService {
 
-  getUserContestHistory(userHandle: string): Observable<any> {
+  getUserContestHistory(userHandle: string, pageNum: number): Observable<any> {
     /**
      *  {
      *    numPages: 2,
@@ -28,7 +28,7 @@ export class DashboardService {
      *    ]
      *  }
      */
-    return this.http.get(`${environment.apiUrl}/dashboard`, { params: { handle: userHandle } })
+    return this.http.get(`${environment.apiUrl}/dashboard`, { params: { handle: userHandle, page: pageNum.toString() } })
       .pipe( catchError(this.handleError) );
   }
 

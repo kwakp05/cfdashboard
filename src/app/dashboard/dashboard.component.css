@@ -11,6 +11,11 @@
     font-weight: bold;
 }
 
+.contests_container {
+    width: 100%;
+    text-align: center;
+}
+
 .contest {
     font-size: 15px;
     color: #202124;
@@ -48,6 +53,21 @@
 
 .contest:hover, .contest:focus {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.page_bar {
+    width: 25rem;
+    padding: 0;
+}
+
+.page_bar li {
+    list-style-type: none;
+    display: inline-block;
+    width: 25%;
+}
+
+.page_bar button {
+    width: 100%;
 }
 
 .rating-gray {

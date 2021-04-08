@@ -147,7 +147,7 @@ exports.mockUserRating = function(handle) {
         result: [
             {
                 contestId: 1113,
-                contestName: "Codeforces Round #539 (Div. 2)",
+                contestName: "First Contest",
                 handle: handle,
                 rank: 2,
                 ratingUpdateTimeSeconds: 1550343900,
@@ -156,7 +156,7 @@ exports.mockUserRating = function(handle) {
             },
             {
                 contestId: 1157,
-                contestName: "Codeforces Round #555 (Div. 3)",
+                contestName: "Second Contest",
                 handle: handle,
                 rank: 4,
                 ratingUpdateTimeSeconds: 1556296500,
@@ -189,7 +189,43 @@ exports.mockUserRating = function(handle) {
                 ratingUpdateTimeSeconds: 1556296500,
                 oldRating: 1516,
                 newRating: 1584
-            }
+            },
+            {
+                contestId: 1157,
+                contestName: "Sixth Contest",
+                handle: handle,
+                rank: 4,
+                ratingUpdateTimeSeconds: 1556296500,
+                oldRating: 1516,
+                newRating: 1584
+            },
+            {
+                contestId: 1157,
+                contestName: "Seventh Contest",
+                handle: handle,
+                rank: 4,
+                ratingUpdateTimeSeconds: 1556296500,
+                oldRating: 1516,
+                newRating: 1584
+            },
+            {
+                contestId: 1157,
+                contestName: "Eighth Contest",
+                handle: handle,
+                rank: 4,
+                ratingUpdateTimeSeconds: 1556296500,
+                oldRating: 1516,
+                newRating: 1584
+            },
+            {
+                contestId: 1157,
+                contestName: "Ninth Contest",
+                handle: handle,
+                rank: 4,
+                ratingUpdateTimeSeconds: 1556296500,
+                oldRating: 1516,
+                newRating: 1584
+            },
         ]
     };
 }
