@@ -221,7 +221,7 @@ function addContestAnalyticsToDatabase(contestId, docSnapshot) {
     const ratingsWithoutHandles = new Array(Math.ceil(CF_MAX_RATING / DB_RATING_WINDOW));
     ratingsWithoutHandles.fill(0);
     for (let i = 0; i < data.ratings.length; i++) {
-      ratingsWithoutHandles[Math.floor(data.ratings[i].rating / DB_RATING_WINDOW)]++;
+      ratingsWithoutHandles[Math.max(0, Math.floor(data.ratings[i].rating / DB_RATING_WINDOW))]++;
     }
     const participation = ratings.ratingCutoffs.map((cutoff) => ({ rank: cutoff.title, count: 0 }));
     for (let i = 0; i < ratingsWithoutHandles.length; i++) {
