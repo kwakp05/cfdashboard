@@ -6,6 +6,11 @@ const ratings = require("./ratings");
 const { log } = require("firebase-functions/lib/logger");
 
 const DASHBOARD_CONTESTS_PER_PAGE = 4;
+// An upper-bound for Codeforces user ratings
+const CF_MAX_RATING = 4000;
+// Window size for participant ratings storage in database.
+// Note that smaller window => more precise calculations but more latency
+const DB_RATING_WINDOW = 10;
 
 exports.serveDashboardRequest = function(req, res) {
   const userHandle = req.query.handle;
@@ -41,7 +46,7 @@ exports.serveContestDetailsRequest = function(req, res) {
 
 function getContestDetails(contestId) {
   return getContestAnalytics(contestId).then((analytics) => {
-    delete analytics.standings;
+    delete analytics.ratingsFreq;
     return analytics;
   });
 }
@@ -84,8 +89,8 @@ function getDashboardData(userHandle, pageNum) {
 
         const cur = contest;
         promiseList.push(getContestAnalytics(cur.contestId).then((contestDoc) => {
-          cur.expectedRank = calculateSeed(contestDoc.standings, cur.oldRating, cur.rank);
-          cur.performance = calculatePerformance(contestDoc.standings, cur.rank);
+          cur.expectedRank = calculateSeed(contestDoc.ratingsFreq, cur.oldRating, cur.rank);
+          cur.performance = calculatePerformance(contestDoc.ratingsFreq, cur.rank);
           return cur;
         }));
       }
@@ -103,28 +108,29 @@ function getDashboardData(userHandle, pageNum) {
   });
 }
 
-function calculateSeed(standingsRatings, queryRating, queryRank) {
+function calculateSeed(ratingsFreq, queryRating, queryRank) {
   let seed = 1;
-  for (let rank = 0; rank < standingsRatings.length; rank++) {
-    if (rank + 1 == queryRank)
-      continue;
+  for (let i = 0; i < ratingsFreq.length; i++) {
+    const rating = i * DB_RATING_WINDOW + Math.floor(DB_RATING_WINDOW / 2);
     
     // https://codeforces.com/blog/entry/20762
-    const lossProb = 1 / (1 + Math.pow(10, (queryRating - standingsRatings[rank]) / 400));
-    seed += lossProb;
+    const lossProb = 1 / (1 + Math.pow(10, (queryRating - rating) / 400));
+    seed += Number(ratingsFreq[i]) * lossProb;
   }
   return Math.round(seed);
 }
 
-function calculatePerformance(standingsRatings, queryRank) {
+function calculatePerformance(ratingsFreq, queryRank) {
+  // If first place, the performance per CF rating formulas is technically undefined. I wonder
+  // how CF actually deals with this.
   if (queryRank == 1)
-    return 3800;
+    return CF_MAX_RATING;
 
   let loRating = 0;
-  let hiRating = 5000;
+  let hiRating = CF_MAX_RATING;
   while (loRating < hiRating) {
     const midRating = Math.ceil((loRating + hiRating) / 2);
-    const seed = Math.round(calculateSeed(standingsRatings, midRating, queryRank));
+    const seed = Math.round(calculateSeed(ratingsFreq, midRating, queryRank));
     if (seed < queryRank) {
       hiRating = midRating - 1;
     } else {
@@ -170,7 +176,7 @@ function addContestAnalyticsToDatabase(contestId, docSnapshot) {
    *          },
    *          ...
    *      ],
-   *      standings: [
+   *      ratingsFreq: [
    *          3200,
    *          1638,
    *          2419,
@@ -208,11 +214,19 @@ function addContestAnalyticsToDatabase(contestId, docSnapshot) {
       }
     }
     
+    
     log(`${contestId} analytics: participation`);
-    const ratingsWithoutHandles = data.ratings.map((handleAndRating) => handleAndRating.rating);
+    // `ratingsWithoutHandles` is actually a frequency map that relates ratings to number of participants with that rating.
+    // Each index in `ratingsWithoutHandles` corresponds with a 10-point rating window ([0] => 0-10, ..., [399] => 3990-4000). 
+    const ratingsWithoutHandles = new Array(Math.ceil(CF_MAX_RATING / DB_RATING_WINDOW));
+    ratingsWithoutHandles.fill(0);
+    for (let i = 0; i < data.ratings.length; i++) {
+      ratingsWithoutHandles[Math.floor(data.ratings[i].rating / DB_RATING_WINDOW)]++;
+    }
     const participation = ratings.ratingCutoffs.map((cutoff) => ({ rank: cutoff.title, count: 0 }));
-    for (const rating of ratingsWithoutHandles) {
-      participation[ratings.fromRatingGetIndex(rating)].count++;
+    for (let i = 0; i < ratingsWithoutHandles.length; i++) {
+      const rating = i * DB_RATING_WINDOW + Math.floor(DB_RATING_WINDOW / 2);
+      participation[ratings.fromRatingGetIndex(rating)].count += ratingsWithoutHandles[i];
     }
 
     log(`${contestId} analytics: benchmarks`);
@@ -244,7 +258,7 @@ function addContestAnalyticsToDatabase(contestId, docSnapshot) {
       problems: problemsList,
       participation: participation,
       benchmarks: benchmarks,
-      standings: ratingsWithoutHandles
+      ratingsFreq: ratingsWithoutHandles
     };
     docSnapshot.ref.set(documentData);
     return documentData;

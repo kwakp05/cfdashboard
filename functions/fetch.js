@@ -130,6 +130,74 @@ exports.requestContestStandings = function(contestId) {
 }
 
 exports.requestContestData = function(contestId) {
+    /**
+     *  Output format:
+     *
+     *  {
+     *      status: "OK",
+     *      result: {
+     *          contest: {
+     *              id: 123,
+     *              name: "Global Round 1",
+     *              type: "CF" | "IOI" | "ICPC",
+     *              phase: "BEFORE" | "CODING" | "PENDING_SYSTEM_TEST" | "SYSTEM_TEST" | "FINISHED",
+     *              frozen: false,
+     *              durationSeconds: 10800,
+     *              startTimeSeconds: 1000,
+     *              relativeTimeSeconds: 1200
+     *          },
+     *          problems: [
+     *              {
+     *                  contestId: 123,
+     *                  index: "A",
+     *                  name: "a tough problem",
+     *                  type: "PROGRAMMING" | "QUESTION",
+     *                  points: 2500 (absent for ICPC-style contests),
+     *                  rating: 2300,
+     *                  tags: [ "dp", "greedy" ]
+     *              },
+     *              ...
+     *          ],
+     *          rows: [
+     *              {
+     *                  party: {
+     *                      contestId: 123,
+     *                      members: [
+     *                          { handle: "tourist" }
+     *                      ],
+     *                      participantType: "CONTESTANT" | "PRACTICE" | "VIRTUAL" | "MANAGER" | "OUT_OF_COMPETITION",
+     *                      ghost: false,
+     *                      room: 12,
+     *                      startTimeSeconds: 1000
+     *                  },
+     *                  rank: 1,
+     *                  points: 5000,
+     *                  penalty: 12 (ICPC-style penalty),
+     *                  successfulHackCount: 1,
+     *                  unsuccessfulHackCount: 1,
+     *                  problemResults: [
+     *                      {
+     *                          points: 1312,
+     *                          penalty: 12 (ICPC-style penalty),
+     *                          rejectedAttemptCount: 2,
+     *                          type: "PRELIMINARY" | "FINAL",
+     *                          bestSubmissionTimeSeconds: 3624
+     *                      },
+     *                      ...
+     *                  ]
+     *              },
+     *              ...
+     *          ],
+     *          ratings: [
+     *              {
+     *                  handle: "tourist",
+     *                  rating: 3000,
+     *              },
+     *              ...
+     *          ]
+     *      }
+     *  }
+     */
     const contestRatingChangesPromise = this.requestContestRatingChanges(contestId).then((result) => {
         return result.map((ranklistRow) => ({ handle: ranklistRow.handle, rating: ranklistRow.oldRating }));
     });
